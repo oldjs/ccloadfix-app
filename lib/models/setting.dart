@@ -5,6 +5,7 @@ class Setting {
   final String defaultValue;
   final String valueType;
   final String description;
+  final int? updatedAt; // Unix 秒时间戳，后端有返回这个字段
 
   Setting({
     required this.key,
@@ -12,6 +13,7 @@ class Setting {
     required this.defaultValue,
     required this.valueType,
     required this.description,
+    this.updatedAt,
   });
 
   // 当前值是否跟默认值不同
@@ -24,6 +26,7 @@ class Setting {
       defaultValue: json['default_value']?.toString() ?? '',
       valueType: json['value_type'] ?? 'string',
       description: json['description'] ?? '',
+      updatedAt: json['updated_at'],
     );
   }
 }

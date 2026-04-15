@@ -16,6 +16,7 @@ class DioClient {
     ));
 
     // 请求拦截器：自动带上 token 和 base url
+    // 响应拦截器：解包后端统一的 {success, data, error, count} 外壳
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
         // 每次请求都从 storage 读最新的 base url，去尾部斜杠防止拼接重复
@@ -29,6 +30,29 @@ class DioClient {
           options.headers['Authorization'] = 'Bearer $token';
         }
         handler.next(options);
+      },
+      onResponse: (response, handler) {
+        final raw = response.data;
+        // 后端所有响应都包在 APIResponse{success, data, error, count} 里，这里自动解包
+        if (raw is Map<String, dynamic> && raw.containsKey('success')) {
+          if (raw['success'] != true) {
+            // HTTP 200 但业务层返回了错误（罕见，正常错误走 4xx/5xx）
+            handler.reject(DioException(
+              requestOptions: response.requestOptions,
+              response: response,
+              type: DioExceptionType.badResponse,
+              error: raw['error'] ?? '请求失败',
+            ));
+            return;
+          }
+          // 解包：provider 直接拿到内层数据，不用再关心外壳
+          response.data = raw['data'];
+          // 分页 count 存到 extra，需要的 provider 自己取
+          if (raw['count'] != null && raw['count'] is int) {
+            response.extra = {'totalCount': raw['count']};
+          }
+        }
+        handler.next(response);
       },
       onError: (error, handler) {
         // 401 的话清掉本地 token，触发跳登录页

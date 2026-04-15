@@ -12,12 +12,11 @@ final summaryProvider = FutureProvider.family<Summary, String>((ref, range) asyn
   return Summary.fromJson(response.data);
 });
 
-// 活跃请求
+// 活跃请求（解包后 response.data 直接就是列表）
 final activeRequestsProvider = FutureProvider<List<ActiveRequest>>((ref) async {
   final response = await DioClient.instance.get(ApiEndpoints.activeRequests);
-  final data = response.data as Map<String, dynamic>;
-  final list = (data['data'] as List?) ?? [];
-  return list.map((e) => ActiveRequest.fromJson(e)).toList();
+  final list = (response.data as List?) ?? [];
+  return list.map((e) => ActiveRequest.fromJson(e as Map<String, dynamic>)).toList();
 });
 
 // 版本信息

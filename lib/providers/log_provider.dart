@@ -75,14 +75,19 @@ class LogQueryNotifier extends Notifier<LogQuery> {
 
 final logQueryProvider = NotifierProvider<LogQueryNotifier, LogQuery>(LogQueryNotifier.new);
 
-// 日志数据 provider
+// 日志数据 provider（解包后 response.data 是日志数组，count 在 extra 里）
 final logListProvider = FutureProvider<LogQueryResult>((ref) async {
   final query = ref.watch(logQueryProvider);
   final response = await DioClient.instance.get(
     ApiEndpoints.logs,
     queryParameters: query.toQueryParams(),
   );
-  return LogQueryResult.fromJson(response.data);
+  final list = (response.data as List?) ?? [];
+  final total = (response.extra['totalCount'] as int?) ?? list.length;
+  return LogQueryResult(
+    data: list.map((e) => LogEntry.fromJson(e as Map<String, dynamic>)).toList(),
+    total: total,
+  );
 });
 
 // 可用模型列表（用于筛选下拉）

@@ -37,7 +37,7 @@ class Summary {
       successRequests: json['success_requests'] ?? 0,
       errorRequests: json['error_requests'] ?? 0,
       range: json['range'] ?? 'today',
-      durationSeconds: json['duration_seconds'] ?? 0,
+      durationSeconds: (json['duration_seconds'] ?? 0).toInt(),
       rpmStats: json['rpm_stats'] != null ? RpmStats.fromJson(json['rpm_stats']) : null,
       isToday: json['is_today'] ?? false,
       byType: byTypeMap,

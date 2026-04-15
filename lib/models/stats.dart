@@ -83,7 +83,7 @@ class StatsResponse {
     final list = (json['stats'] as List?) ?? [];
     return StatsResponse(
       stats: list.map((e) => ChannelStats.fromJson(e)).toList(),
-      durationSeconds: json['duration_seconds'] ?? 0,
+      durationSeconds: (json['duration_seconds'] ?? 0).toInt(),
       rpmStats: json['rpm_stats'] != null ? RpmStats.fromJson(json['rpm_stats']) : null,
       isToday: json['is_today'] ?? false,
     );
