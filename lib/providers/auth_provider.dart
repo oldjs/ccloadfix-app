@@ -44,8 +44,9 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<bool> login(String serverUrl, String password) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      // 先存 server url，dio 拦截器会用
-      await LocalStorage.setServerUrl(serverUrl.trimRight());
+      // 先存 server url，dio 拦截器会用；去掉尾部斜杠防止 URL 拼接出问题
+      final cleanUrl = serverUrl.trim().replaceAll(RegExp(r'/+$'), '');
+      await LocalStorage.setServerUrl(cleanUrl);
 
       final response = await DioClient.instance.post(
         ApiEndpoints.login,

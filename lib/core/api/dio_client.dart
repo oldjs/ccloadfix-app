@@ -9,16 +9,17 @@ class DioClient {
 
   DioClient._() {
     _dio = Dio(BaseOptions(
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 30),
-      sendTimeout: const Duration(seconds: 10),
+      // 移动网络下 10s 太紧了，适当放宽
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 60),
+      sendTimeout: const Duration(seconds: 15),
     ));
 
     // 请求拦截器：自动带上 token 和 base url
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
-        // 每次请求都从 storage 读最新的 base url
-        final baseUrl = LocalStorage.serverUrl;
+        // 每次请求都从 storage 读最新的 base url，去尾部斜杠防止拼接重复
+        final baseUrl = LocalStorage.serverUrl.replaceAll(RegExp(r'/+$'), '');
         if (baseUrl.isNotEmpty) {
           options.baseUrl = baseUrl;
         }

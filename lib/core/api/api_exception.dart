@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../storage/local_storage.dart';
 
 // 统一 API 异常，把 Dio 的各种错误转成人话
 class ApiException implements Exception {
@@ -9,14 +10,18 @@ class ApiException implements Exception {
 
   // 从 DioException 转换
   factory ApiException.fromDio(DioException e) {
+    // 带上服务器地址，方便用户排查是不是地址填错了
+    final serverUrl = LocalStorage.serverUrl;
+    final addrHint = serverUrl.isEmpty ? '' : '\n当前地址: $serverUrl';
+
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return ApiException('连接超时，请检查网络', statusCode: null);
+        return ApiException('连接超时，请检查服务器地址和网络$addrHint', statusCode: null);
 
       case DioExceptionType.connectionError:
-        return ApiException('无法连接服务器，请检查地址是否正确', statusCode: null);
+        return ApiException('无法连接服务器，请检查地址是否正确$addrHint', statusCode: null);
 
       case DioExceptionType.badResponse:
         final statusCode = e.response?.statusCode;
