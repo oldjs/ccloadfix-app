@@ -118,7 +118,7 @@ class MetricBucket {
 
   factory MetricBucket.fromJson(Map<String, dynamic> json) {
     return MetricBucket(
-      ts: safeInt(json['ts']),
+      ts: safeTimestamp(json['ts']),
       success: safeInt(json['success']),
       error: safeInt(json['error']),
       avgFirstByteTime: (json['avg_first_byte_time_seconds'] ?? 0).toDouble(),

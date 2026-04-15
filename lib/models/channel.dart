@@ -171,7 +171,7 @@ class ChannelTestResult {
     return ChannelTestResult(
       success: json['success'] ?? false,
       statusCode: safeInt(json['status_code']),
-      message: json['message'] ?? '',
+      message: json['error']?.toString() ?? '',
       responseText: json['response_text'],
       durationMs: safeInt(json['duration_ms']),
       firstByteDurationMs: safeIntOrNull(json['first_byte_duration_ms']),

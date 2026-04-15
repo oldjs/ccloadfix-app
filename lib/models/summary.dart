@@ -116,44 +116,47 @@ class RpmStats {
   }
 }
 
-// 活跃请求
+// 活跃请求 — 字段名对齐后端 active_requests.go 的 ActiveRequest struct
 class ActiveRequest {
   final String id;
   final int channelId;
   final String channelName;
+  final String channelType;
   final String model;
-  final int? authTokenId;
-  final int startedAt;
-  final int elapsedMs;
+  final int? tokenId;        // 后端字段名 "token_id"
+  final int startTime;       // 后端字段名 "start_time"，Unix 毫秒
   final bool isStreaming;
   final String baseUrl;
-  final String requestPath;
+  final String clientIp;
 
   ActiveRequest({
     required this.id,
     required this.channelId,
     required this.channelName,
+    required this.channelType,
     required this.model,
-    this.authTokenId,
-    required this.startedAt,
-    required this.elapsedMs,
+    this.tokenId,
+    required this.startTime,
     required this.isStreaming,
     required this.baseUrl,
-    required this.requestPath,
+    required this.clientIp,
   });
+
+  // 已经过去多少毫秒（实时算，不依赖后端字段）
+  int get elapsedMs => DateTime.now().millisecondsSinceEpoch - startTime;
 
   factory ActiveRequest.fromJson(Map<String, dynamic> json) {
     return ActiveRequest(
       id: json['id']?.toString() ?? '',
       channelId: safeInt(json['channel_id']),
       channelName: json['channel_name'] ?? '',
+      channelType: json['channel_type'] ?? '',
       model: json['model'] ?? '',
-      authTokenId: safeIntOrNull(json['auth_token_id']),
-      startedAt: safeInt(json['started_at']),
-      elapsedMs: safeInt(json['elapsed_ms']),
+      tokenId: safeIntOrNull(json['token_id']),
+      startTime: safeInt(json['start_time']),
       isStreaming: json['is_streaming'] ?? false,
       baseUrl: json['base_url'] ?? '',
-      requestPath: json['request_path'] ?? '',
+      clientIp: json['client_ip'] ?? '',
     );
   }
 }
