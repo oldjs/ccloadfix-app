@@ -1,3 +1,5 @@
+import '../core/utils/safe_parse.dart';
+
 // 仪表盘摘要数据
 class Summary {
   final int totalRequests;
@@ -33,11 +35,11 @@ class Summary {
     }
 
     return Summary(
-      totalRequests: json['total_requests'] ?? 0,
-      successRequests: json['success_requests'] ?? 0,
-      errorRequests: json['error_requests'] ?? 0,
+      totalRequests: safeInt(json['total_requests']),
+      successRequests: safeInt(json['success_requests']),
+      errorRequests: safeInt(json['error_requests']),
       range: json['range'] ?? 'today',
-      durationSeconds: (json['duration_seconds'] ?? 0).toInt(),
+      durationSeconds: safeInt(json['duration_seconds']),
       rpmStats: json['rpm_stats'] != null ? RpmStats.fromJson(json['rpm_stats']) : null,
       isToday: json['is_today'] ?? false,
       byType: byTypeMap,
@@ -72,13 +74,13 @@ class TypeSummary {
   factory TypeSummary.fromJson(Map<String, dynamic> json) {
     return TypeSummary(
       channelType: json['channel_type'] ?? '',
-      totalRequests: json['total_requests'] ?? 0,
-      successRequests: json['success_requests'] ?? 0,
-      errorRequests: json['error_requests'] ?? 0,
-      totalInputTokens: json['total_input_tokens'] ?? 0,
-      totalOutputTokens: json['total_output_tokens'] ?? 0,
-      totalCacheReadTokens: json['total_cache_read_tokens'] ?? 0,
-      totalCacheCreationTokens: json['total_cache_creation_tokens'] ?? 0,
+      totalRequests: safeInt(json['total_requests']),
+      successRequests: safeInt(json['success_requests']),
+      errorRequests: safeInt(json['error_requests']),
+      totalInputTokens: safeInt(json['total_input_tokens']),
+      totalOutputTokens: safeInt(json['total_output_tokens']),
+      totalCacheReadTokens: safeInt(json['total_cache_read_tokens']),
+      totalCacheCreationTokens: safeInt(json['total_cache_creation_tokens']),
       totalCost: (json['total_cost'] ?? 0).toDouble(),
     );
   }
@@ -142,13 +144,13 @@ class ActiveRequest {
 
   factory ActiveRequest.fromJson(Map<String, dynamic> json) {
     return ActiveRequest(
-      id: json['id'] ?? '',
-      channelId: json['channel_id'] ?? 0,
+      id: json['id']?.toString() ?? '',
+      channelId: safeInt(json['channel_id']),
       channelName: json['channel_name'] ?? '',
       model: json['model'] ?? '',
-      authTokenId: json['auth_token_id'],
-      startedAt: json['started_at'] ?? 0,
-      elapsedMs: json['elapsed_ms'] ?? 0,
+      authTokenId: safeIntOrNull(json['auth_token_id']),
+      startedAt: safeInt(json['started_at']),
+      elapsedMs: safeInt(json['elapsed_ms']),
       isStreaming: json['is_streaming'] ?? false,
       baseUrl: json['base_url'] ?? '',
       requestPath: json['request_path'] ?? '',

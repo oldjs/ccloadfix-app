@@ -1,3 +1,4 @@
+import '../core/utils/safe_parse.dart';
 import 'summary.dart';
 
 // 渠道+模型维度统计
@@ -44,22 +45,22 @@ class ChannelStats {
 
   factory ChannelStats.fromJson(Map<String, dynamic> json) {
     return ChannelStats(
-      channelId: json['channel_id'] ?? 0,
+      channelId: safeInt(json['channel_id']),
       channelName: json['channel_name'] ?? '',
-      channelPriority: json['channel_priority'] ?? 0,
+      channelPriority: safeInt(json['channel_priority']),
       model: json['model'] ?? '',
-      success: json['success'] ?? 0,
-      error: json['error'] ?? 0,
-      total: json['total'] ?? 0,
+      success: safeInt(json['success']),
+      error: safeInt(json['error']),
+      total: safeInt(json['total']),
       avgFirstByteTime: (json['avg_first_byte_time_seconds'] ?? 0).toDouble(),
       avgDuration: (json['avg_duration_seconds'] ?? 0).toDouble(),
       peakRpm: (json['peak_rpm'] ?? 0).toDouble(),
       avgRpm: (json['avg_rpm'] ?? 0).toDouble(),
       recentRpm: (json['recent_rpm'] ?? 0).toDouble(),
-      totalInputTokens: json['total_input_tokens'] ?? 0,
-      totalOutputTokens: json['total_output_tokens'] ?? 0,
-      totalCacheReadTokens: json['total_cache_read_input_tokens'] ?? 0,
-      totalCacheCreationTokens: json['total_cache_creation_input_tokens'] ?? 0,
+      totalInputTokens: safeInt(json['total_input_tokens']),
+      totalOutputTokens: safeInt(json['total_output_tokens']),
+      totalCacheReadTokens: safeInt(json['total_cache_read_input_tokens']),
+      totalCacheCreationTokens: safeInt(json['total_cache_creation_input_tokens']),
       totalCost: (json['total_cost'] ?? 0).toDouble(),
     );
   }
@@ -83,7 +84,7 @@ class StatsResponse {
     final list = (json['stats'] as List?) ?? [];
     return StatsResponse(
       stats: list.map((e) => ChannelStats.fromJson(e)).toList(),
-      durationSeconds: (json['duration_seconds'] ?? 0).toInt(),
+      durationSeconds: safeInt(json['duration_seconds']),
       rpmStats: json['rpm_stats'] != null ? RpmStats.fromJson(json['rpm_stats']) : null,
       isToday: json['is_today'] ?? false,
     );
@@ -117,14 +118,14 @@ class MetricBucket {
 
   factory MetricBucket.fromJson(Map<String, dynamic> json) {
     return MetricBucket(
-      ts: json['ts'] ?? 0,
-      success: json['success'] ?? 0,
-      error: json['error'] ?? 0,
+      ts: safeInt(json['ts']),
+      success: safeInt(json['success']),
+      error: safeInt(json['error']),
       avgFirstByteTime: (json['avg_first_byte_time_seconds'] ?? 0).toDouble(),
       avgDuration: (json['avg_duration_seconds'] ?? 0).toDouble(),
       totalCost: (json['total_cost'] ?? 0).toDouble(),
-      inputTokens: json['input_tokens'] ?? 0,
-      outputTokens: json['output_tokens'] ?? 0,
+      inputTokens: safeInt(json['input_tokens']),
+      outputTokens: safeInt(json['output_tokens']),
     );
   }
 }

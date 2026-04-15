@@ -1,3 +1,5 @@
+import '../core/utils/safe_parse.dart';
+
 // 渠道数据模型
 class Channel {
   final int id;
@@ -48,22 +50,22 @@ class Channel {
 
   factory Channel.fromJson(Map<String, dynamic> json) {
     return Channel(
-      id: json['id'] ?? 0,
+      id: safeInt(json['id']),
       name: json['name'] ?? '',
       channelType: json['channel_type'] ?? '',
       url: json['url'] ?? '',
-      priority: json['priority'] ?? 0,
+      priority: safeInt(json['priority']),
       enabled: json['enabled'] ?? false,
       models: (json['models'] as List?)?.map((e) => ChannelModel.fromJson(e)).toList() ?? [],
       dailyCostLimit: json['daily_cost_limit']?.toDouble(),
       keyStrategy: json['key_strategy'] ?? 'sequential',
       cooldownUntil: json['cooldown_until']?.toString(),
-      cooldownRemainingMs: json['cooldown_remaining_ms'],
+      cooldownRemainingMs: safeIntOrNull(json['cooldown_remaining_ms']),
       keyCooldowns: (json['key_cooldowns'] as List?)?.map((e) => KeyCooldown.fromJson(e)).toList(),
       effectivePriority: json['effective_priority']?.toDouble(),
       successRate: json['success_rate']?.toDouble(),
       urlStats: (json['url_stats'] as List?)?.map((e) => UrlStat.fromJson(e)).toList(),
-      keyCount: json['key_count'] ?? 0,
+      keyCount: safeInt(json['key_count']),
       createdAt: json['created_at']?.toString(),
       updatedAt: json['updated_at']?.toString(),
     );
@@ -101,9 +103,9 @@ class KeyCooldown {
 
   factory KeyCooldown.fromJson(Map<String, dynamic> json) {
     return KeyCooldown(
-      keyIndex: json['key_index'] ?? 0,
+      keyIndex: safeInt(json['key_index']),
       cooldownUntil: json['cooldown_until']?.toString(),
-      cooldownRemainingMs: json['cooldown_remaining_ms'] ?? 0,
+      cooldownRemainingMs: safeInt(json['cooldown_remaining_ms']),
     );
   }
 }
@@ -131,12 +133,12 @@ class UrlStat {
   factory UrlStat.fromJson(Map<String, dynamic> json) {
     return UrlStat(
       url: json['url'] ?? '',
-      latencyMs: json['latency_ms'] ?? 0,
-      failureCount: json['failure_count'] ?? 0,
-      successCount: json['success_count'] ?? 0,
+      latencyMs: safeInt(json['latency_ms']),
+      failureCount: safeInt(json['failure_count']),
+      successCount: safeInt(json['success_count']),
       isInCooldown: json['is_in_cooldown'],
       cooldownUntil: json['cooldown_until']?.toString(),
-      cooldownRemainingMs: json['cooldown_remaining_ms'],
+      cooldownRemainingMs: safeIntOrNull(json['cooldown_remaining_ms']),
     );
   }
 }
@@ -168,14 +170,14 @@ class ChannelTestResult {
   factory ChannelTestResult.fromJson(Map<String, dynamic> json) {
     return ChannelTestResult(
       success: json['success'] ?? false,
-      statusCode: json['status_code'] ?? 0,
+      statusCode: safeInt(json['status_code']),
       message: json['message'] ?? '',
       responseText: json['response_text'],
-      durationMs: json['duration_ms'] ?? 0,
-      firstByteDurationMs: json['first_byte_duration_ms'],
+      durationMs: safeInt(json['duration_ms']),
+      firstByteDurationMs: safeIntOrNull(json['first_byte_duration_ms']),
       costUsd: json['cost_usd']?.toDouble(),
-      testedKeyIndex: json['tested_key_index'] ?? 0,
-      totalKeys: json['total_keys'] ?? 0,
+      testedKeyIndex: safeInt(json['tested_key_index']),
+      totalKeys: safeInt(json['total_keys']),
     );
   }
 }

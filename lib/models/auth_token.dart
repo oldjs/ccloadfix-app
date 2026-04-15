@@ -1,3 +1,5 @@
+import '../core/utils/safe_parse.dart';
+
 // API 访问 Token
 class AuthToken {
   final int id;
@@ -57,23 +59,23 @@ class AuthToken {
 
   factory AuthToken.fromJson(Map<String, dynamic> json) {
     return AuthToken(
-      id: json['id'] ?? 0,
+      id: safeInt(json['id']),
       token: json['token'],
       description: json['description'] ?? '',
       createdAt: json['created_at']?.toString(),
-      expiresAt: json['expires_at'],
-      lastUsedAt: json['last_used_at'],
+      expiresAt: safeIntOrNull(json['expires_at']),
+      lastUsedAt: safeIntOrNull(json['last_used_at']),
       isActive: json['is_active'] ?? false,
-      successCount: json['success_count'] ?? 0,
-      failureCount: json['failure_count'] ?? 0,
+      successCount: safeInt(json['success_count']),
+      failureCount: safeInt(json['failure_count']),
       streamAvgTtfb: (json['stream_avg_ttfb'] ?? 0).toDouble(),
       nonStreamAvgRt: (json['non_stream_avg_rt'] ?? 0).toDouble(),
-      streamCount: json['stream_count'] ?? 0,
-      nonStreamCount: json['non_stream_count'] ?? 0,
-      promptTokensTotal: json['prompt_tokens_total'] ?? 0,
-      completionTokensTotal: json['completion_tokens_total'] ?? 0,
-      cacheReadTokensTotal: json['cache_read_tokens_total'] ?? 0,
-      cacheCreationTokensTotal: json['cache_creation_tokens_total'] ?? 0,
+      streamCount: safeInt(json['stream_count']),
+      nonStreamCount: safeInt(json['non_stream_count']),
+      promptTokensTotal: safeInt(json['prompt_tokens_total']),
+      completionTokensTotal: safeInt(json['completion_tokens_total']),
+      cacheReadTokensTotal: safeInt(json['cache_read_tokens_total']),
+      cacheCreationTokensTotal: safeInt(json['cache_creation_tokens_total']),
       totalCostUsd: (json['total_cost_usd'] ?? 0).toDouble(),
       costUsedUsd: json['cost_used_usd']?.toDouble(),
       costLimitUsd: json['cost_limit_usd']?.toDouble(),

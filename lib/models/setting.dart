@@ -1,3 +1,5 @@
+import '../core/utils/safe_parse.dart';
+
 // 系统设置项
 class Setting {
   final String key;
@@ -26,7 +28,7 @@ class Setting {
       defaultValue: json['default_value']?.toString() ?? '',
       valueType: json['value_type'] ?? 'string',
       description: json['description'] ?? '',
-      updatedAt: json['updated_at'],
+      updatedAt: safeIntOrNull(json['updated_at']),
     );
   }
 }

@@ -1,3 +1,5 @@
+import '../core/utils/safe_parse.dart';
+
 // 请求日志条目
 class LogEntry {
   final int id;
@@ -58,28 +60,28 @@ class LogEntry {
 
   factory LogEntry.fromJson(Map<String, dynamic> json) {
     return LogEntry(
-      id: json['id'] ?? 0,
-      time: json['time'] ?? 0,
+      id: safeInt(json['id']),
+      time: safeInt(json['time']),
       model: json['model'] ?? '',
       actualModel: json['actual_model'],
-      channelId: json['channel_id'] ?? 0,
+      channelId: safeInt(json['channel_id']),
       channelName: json['channel_name'] ?? '',
-      statusCode: json['status_code'] ?? 0,
+      statusCode: safeInt(json['status_code']),
       message: json['message'],
       duration: (json['duration'] ?? 0).toDouble(),
       isStreaming: json['is_streaming'] ?? false,
       firstByteTime: json['first_byte_time']?.toDouble(),
       apiKeyUsed: json['api_key_used'],
       apiKeyHash: json['api_key_hash'],
-      authTokenId: json['auth_token_id'],
+      authTokenId: safeIntOrNull(json['auth_token_id']),
       clientIp: json['client_ip'],
       baseUrl: json['base_url'],
       serviceTier: json['service_tier'],
-      inputTokens: json['input_tokens'] ?? 0,
-      outputTokens: json['output_tokens'] ?? 0,
-      cacheReadInputTokens: json['cache_read_input_tokens'] ?? 0,
-      cache5mInputTokens: json['cache_5m_input_tokens'] ?? 0,
-      cache1hInputTokens: json['cache_1h_input_tokens'] ?? 0,
+      inputTokens: safeInt(json['input_tokens']),
+      outputTokens: safeInt(json['output_tokens']),
+      cacheReadInputTokens: safeInt(json['cache_read_input_tokens']),
+      cache5mInputTokens: safeInt(json['cache_5m_input_tokens']),
+      cache1hInputTokens: safeInt(json['cache_1h_input_tokens']),
       cost: (json['cost'] ?? 0).toDouble(),
     );
   }
@@ -96,7 +98,7 @@ class LogQueryResult {
     final list = (json['data'] as List?) ?? [];
     return LogQueryResult(
       data: list.map((e) => LogEntry.fromJson(e)).toList(),
-      total: json['total'] ?? 0,
+      total: safeInt(json['total']),
     );
   }
 }
