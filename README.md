@@ -14,7 +14,7 @@ ccLoadFix 移动端管理 App，用 Flutter 构建，配合 [ccLoadFix](https://
 - Material Design 3 风格，支持亮色/暗色主题
 - 中文界面
 
-## 运行
+## 本地开发
 
 ```bash
 flutter run
@@ -22,9 +22,11 @@ flutter run
 
 ## 构建 APK
 
-```bash
-flutter build apk
-```
+APK 通过 GitHub Actions 自动构建，推送到 `main` 分支后会自动触发。
+
+构建产物在 Actions 页面的 Artifacts 中下载：`ccloadfix-app-release`。
+
+也可手动触发：Actions -> Build APK -> Run workflow。
 
 ## 连接
 
