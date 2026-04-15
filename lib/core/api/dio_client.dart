@@ -30,6 +30,10 @@ class DioClient {
         handler.next(options);
       },
       onError: (error, handler) {
+        // 401 的话清掉本地 token，触发跳登录页
+        if (error.response?.statusCode == 401) {
+          LocalStorage.clearAuth();
+        }
         handler.next(error);
       },
     ));
