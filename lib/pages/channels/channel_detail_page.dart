@@ -262,9 +262,9 @@ class _ChannelDetailPageState extends ConsumerState<ChannelDetailPage> {
                   Row(
                     children: [
                       Icon(
-                        stat.isInCooldown == true ? Icons.pause_circle : Icons.check_circle,
+                        stat.cooledDown ? Icons.pause_circle : Icons.check_circle,
                         size: 14,
-                        color: stat.isInCooldown == true ? Colors.orange : Colors.green,
+                        color: stat.cooledDown ? Colors.orange : Colors.green,
                       ),
                       const SizedBox(width: 6),
                       Expanded(
@@ -276,12 +276,12 @@ class _ChannelDetailPageState extends ConsumerState<ChannelDetailPage> {
                   Row(
                     children: [
                       const SizedBox(width: 20),
-                      Text('延迟: ${stat.latencyMs}ms', style: TextStyle(fontSize: 11, color: colorScheme.onSurfaceVariant)),
+                      Text('延迟: ${stat.latencyMs.toStringAsFixed(0)}ms', style: TextStyle(fontSize: 11, color: colorScheme.onSurfaceVariant)),
                       const SizedBox(width: 12),
-                      Text('成功: ${stat.successCount}', style: const TextStyle(fontSize: 11, color: Colors.green)),
+                      Text('成功: ${stat.requests}', style: const TextStyle(fontSize: 11, color: Colors.green)),
                       const SizedBox(width: 12),
-                      Text('失败: ${stat.failureCount}', style: TextStyle(
-                        fontSize: 11, color: stat.failureCount > 0 ? colorScheme.error : colorScheme.onSurfaceVariant,
+                      Text('失败: ${stat.failures}', style: TextStyle(
+                        fontSize: 11, color: stat.failures > 0 ? colorScheme.error : colorScheme.onSurfaceVariant,
                       )),
                     ],
                   ),

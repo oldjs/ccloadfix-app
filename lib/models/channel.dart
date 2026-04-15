@@ -110,35 +110,35 @@ class KeyCooldown {
   }
 }
 
-// URL 统计
+// URL 统计 — 字段名对齐后端 url_selector.go 的 URLStat struct
 class UrlStat {
   final String url;
-  final int latencyMs;
-  final int failureCount;
-  final int successCount;
-  final bool? isInCooldown;
-  final String? cooldownUntil;
-  final int? cooldownRemainingMs;
+  final double latencyMs;          // 选择器使用的有效延迟
+  final int requests;              // 后端字段名 "requests"，代表成功次数
+  final int failures;              // 后端字段名 "failures"
+  final bool cooledDown;           // 后端字段名 "cooled_down"
+  final int cooldownRemainMs;      // 后端字段名 "cooldown_remain_ms"
+  final double weight;             // 动态选择权重
 
   UrlStat({
     required this.url,
     required this.latencyMs,
-    required this.failureCount,
-    required this.successCount,
-    this.isInCooldown,
-    this.cooldownUntil,
-    this.cooldownRemainingMs,
+    required this.requests,
+    required this.failures,
+    required this.cooledDown,
+    required this.cooldownRemainMs,
+    required this.weight,
   });
 
   factory UrlStat.fromJson(Map<String, dynamic> json) {
     return UrlStat(
       url: json['url'] ?? '',
-      latencyMs: safeInt(json['latency_ms']),
-      failureCount: safeInt(json['failure_count']),
-      successCount: safeInt(json['success_count']),
-      isInCooldown: json['is_in_cooldown'],
-      cooldownUntil: json['cooldown_until']?.toString(),
-      cooldownRemainingMs: safeIntOrNull(json['cooldown_remaining_ms']),
+      latencyMs: (json['latency_ms'] ?? 0).toDouble(),
+      requests: safeInt(json['requests']),
+      failures: safeInt(json['failures']),
+      cooledDown: json['cooled_down'] ?? false,
+      cooldownRemainMs: safeInt(json['cooldown_remain_ms']),
+      weight: (json['weight'] ?? 0).toDouble(),
     );
   }
 }
