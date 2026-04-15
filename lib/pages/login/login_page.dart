@@ -102,7 +102,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: cs.primary.withOpacity(0.25),
+                color: cs.primary.withValues(alpha: 0.25),
                 blurRadius: 24,
                 offset: const Offset(0, 8),
               ),
@@ -132,7 +132,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     // 输入框统一的圆角边框
     final inputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: cs.outline.withOpacity(0.4)),
+      borderSide: BorderSide(color: cs.outline.withValues(alpha: 0.4)),
     );
     final focusedBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
@@ -147,7 +147,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: cs.outlineVariant.withOpacity(0.3)),
+        side: BorderSide(color: cs.outlineVariant.withValues(alpha: 0.3)),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
@@ -239,7 +239,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return Text(
       '密码来自服务端环境变量 CCLOAD_ADMIN_PASSWORD',
       style: theme.textTheme.bodySmall?.copyWith(
-        color: cs.onSurfaceVariant.withOpacity(0.7),
+        color: cs.onSurfaceVariant.withValues(alpha: 0.7),
       ),
       textAlign: TextAlign.center,
     );
